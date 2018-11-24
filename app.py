@@ -24,7 +24,7 @@ def home():
 
 # POST /store {name:}
 @app.route('/store', methods=['POST'])
-def create_store(name):
+def create_store():
   request_data = request.get_json()
   new_store = {
     'name': request_data['name'],
@@ -39,8 +39,8 @@ def get_store(name):
   # iterate over stores
   for store in stores:
   # if the store name matches, return it
-    if store.name == name:
-      return store
+    if store['name'] == name:
+      return jsonify(store)
   # if none match, return an error message
   return jsonify({ 'message': 'No stores found with name {}'.format(name) })
 
@@ -63,12 +63,12 @@ def create_item_in_store(name):
                 'name': req_data['name'],
                 'price': req_data['price']
             }
-            store.items.append(new_item)
+            store['items'].append(new_item)
             return jsonify(new_item)
     return jsonify({ 'message': 'No store found with name {}'.format(name )})
 
 # GET /store/<string:name>/item
-@app.route('/store/<string:name>/item')
+@app.route('/store/<string:name>/items')
 def get_items_in_store(name):
   for store in stores:
     if store['name'] == name:
